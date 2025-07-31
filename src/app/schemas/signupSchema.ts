@@ -15,7 +15,7 @@ export const emailValidation = z
 
 // mutiple values
 export const signupSchema = z.object({
-   username: usernameValidation,
+   userName: usernameValidation,
    email: emailValidation,
    password: z
       .string()
