@@ -1,7 +1,6 @@
 import { resend } from "../lib/resend";
-import VerificationEmailTemplete from "../../../emails/verificationEmail";
+import VerificationEmailTemplete from "../../../emails/verificationEmailTemplete";
 import { ApiResponse } from "../lib/types/apiResponse";
-import { verify } from "crypto";
 
 export async function sendVerificationEmail(email: string, username: string, verifyCode: string): Promise<ApiResponse> {
    try {
