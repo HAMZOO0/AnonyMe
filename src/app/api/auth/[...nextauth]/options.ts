@@ -45,4 +45,36 @@ export const authOptions: NextAuthOptions = {
          },
       }),
    ],
+
+   callbacks: {
+      async session({ session, token }) {
+         if (token) {
+            session.user.id = token.id;
+            session.user.userName = token.userName;
+            session.user.email = token.email;
+            session.user.isVerified = token.isVerified;
+            session.user.isAcceptingMessage = token.isAcceptingMessage;
+         }
+         return session;
+      },
+      // make token more powerful
+      async jwt({ token, user }) {
+         if (user) {
+            token.id = user._id?.toString();
+            token.userName = user.userName;
+            token.email = user.email;
+            token.isVerified = user.isVerified;
+            token.isAcceptingMessage = user.isAcceptingMessage;
+         }
+         return token;
+      },
+   },
+   // the routes will handle by next auth , i dont need to create my own route :) hehe
+   pages: {
+      signIn: "/sign-in",
+   },
+   session: {
+      strategy: "jwt",
+   },
+   secret: process.env.NEXTAUTH_SECRET,
 };
