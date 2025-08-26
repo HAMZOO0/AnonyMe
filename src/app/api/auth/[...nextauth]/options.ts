@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import UserModel from "@/app/model/user.model";
+import UserModel from "@/model/user.model";
 import dbConnect from "@/app/lib/databaseConnect";
 import { createPortal } from "react-dom";
 
@@ -48,15 +48,16 @@ export const authOptions: NextAuthOptions = {
 
    callbacks: {
       async session({ session, token }) {
-         if (token) {
-            session.user.id = token.id;
-            session.user.userName = token.userName;
-            session.user.email = token.email;
-            session.user.isVerified = token.isVerified;
-            session.user.isAcceptingMessage = token.isAcceptingMessage;
+         if (token && session.user) {
+            session.user._id = token._id?.toString();
+            session.user.userName = token.userName as string;
+            session.user.email = token.email as string;
+            session.user.isVerified = token.isVerified as boolean;
+            // session.use.isAcceptingMessage = token.isAcceptingMessage as string;
          }
          return session;
       },
+
       // make token more powerful
       async jwt({ token, user }) {
          if (user) {

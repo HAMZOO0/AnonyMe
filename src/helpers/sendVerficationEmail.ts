@@ -1,6 +1,6 @@
-import { resend } from "../lib/resend";
-import VerificationEmailTemplete from "../../../emails/verificationEmailTemplete";
-import { ApiResponse } from "../lib/types/apiResponse";
+import { resend } from "../app/lib/resend";
+import VerificationEmailTemplete from "../../emails/verificationEmailTemplete";
+import { ApiResponse } from "../app/lib/types/apiResponse";
 
 export async function sendVerificationEmail(email: string, username: string, verifyCode: string): Promise<ApiResponse> {
    try {
