@@ -72,7 +72,7 @@ export const authOptions: NextAuthOptions = {
    },
    // the routes will handle by next auth , i dont need to create my own route :) hehe
    pages: {
-      signIn: "/sign-in",
+      signIn: "/log-in",
    },
    session: {
       strategy: "jwt",

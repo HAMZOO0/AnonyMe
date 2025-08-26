@@ -34,13 +34,5 @@ export async function middleware(request: NextRequest) {
 
 // here we need to add the paths that we want to protect so middleware can run before the request reaches the page
 export const config = {
-   matcher: [
-      // "/verifyemail",
-      "/",
-      "/dashboard/paths*",
-      "/verify/paths*",
-      "/sign-up",
-      "/sign-in",
-      // "/api/me",
-   ],
+   matcher: ["/", "/dashboard/:path*", "/verify/:path*", "/sign-up", "/login-in"],
 };
