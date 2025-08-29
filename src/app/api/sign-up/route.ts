@@ -15,6 +15,18 @@ export async function POST(requst: Request) {
          userName: userName,
          isVerified: true,
       });
+
+      if (!password) {
+         return Response.json(
+            {
+               success: false,
+               message: "Password is required.",
+            },
+            {
+               status: 400,
+            }
+         );
+      }
       if (existingUserVerifiedByUsername) {
          return Response.json(
             {
