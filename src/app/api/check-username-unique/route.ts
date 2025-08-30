@@ -3,7 +3,6 @@ import User from "@/model/user.model";
 import { NextResponse } from "next/server";
 import z from "zod";
 import { usernameValidation } from "@/schemas/signupSchema";
-import { log } from "console";
 
 // to validate the username by using zod schema
 // this is object which makesure the usernmae have the same validation as in usernameValidation schema

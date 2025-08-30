@@ -1,73 +1,88 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import dbConnect from "@/app/lib/databaseConnect";
-import User from "next-auth";
 import UserModel from "@/model/user.model";
 import { Types } from "mongoose";
+import { messageSchema } from "@/schemas/messageSchema";
+import { Message } from "@/model/user.model";
+import { z } from "zod";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
    try {
-      dbConnect();
+      await dbConnect(); // Make sure to await the database connection
 
-      //  here we can get the session
-      const session = await getServerSession(authOptions);
-      console.log("session :: ", session);
+      const { content, userName } = await request.json();
 
-      const user = session?.user;
+      // Validate the content using zod schema first
+      const parseResult = messageSchema.safeParse({ content });
 
-      // if no session
-      if (!session || !session.user) {
-         return Response.json({ message: "Unauthorized" }, { status: 401 });
+      if (!parseResult.success) {
+         const messageErrors = parseResult.error.format().content?._errors || [];
+         return NextResponse.json(
+            {
+               success: false,
+               message: "Invalid message content",
+               errors: messageErrors,
+            },
+            {
+               status: 400,
+            }
+         );
       }
 
-      // get user id from session and convert to ObjectId
-      const userId = new Types.ObjectId(user?._id);
-
-      // find user by id  and aggregation to get only isAcceptingMessage field
-      const existingUser = await UserModel.aggregate([
-         {
-            // get the user by id
-            $match: { _id: userId },
-         },
-         {
-            // array into object
-            $unwind: "$messages",
-         },
-         {
-            // sort messages by createdAt in descending order
-            $sort: { "messages.createdAt": -1 },
-         },
-         {
-            // group back to user level and get only isAcceptingMessage field and messages array
-            $group: {
-               _id: "$_id",
-               messages: { $push: "$messages" },
-            },
-         },
-      ]);
-
-      if (!existingUser || existingUser.length === 0) {
-         return Response.json(
+      // Find user by username
+      const user = await UserModel.findOne({ userName: userName });
+      if (!user) {
+         return NextResponse.json(
             {
                success: false,
                message: "User not found",
             },
-            { status: 404 }
+            {
+               status: 404,
+            }
          );
       }
 
-      console.log("existingUser :: ", existingUser);
+      // Check if user is accepting messages
+      if (!user.isAcceptingMessage) {
+         return NextResponse.json(
+            {
+               success: false,
+               message: "User is not accepting messages at the moment",
+            },
+            {
+               status: 403,
+            }
+         );
+      }
 
-      return Response.json(
+      // Create new message object
+      const newMessage = {
+         content,
+         createdAt: new Date(),
+      };
+
+      // Add the message to user's messages array
+      user.messages.push(newMessage as Message);
+
+      // Save the updated user document
+      await user.save();
+
+      return NextResponse.json(
          {
             success: true,
-            messages: existingUser[0].messages,
+            message: "Message sent successfully",
+            data: newMessage,
          },
-         { status: 200 }
+         {
+            status: 201,
+         }
       );
    } catch (error) {
       console.log("error :: ", error);
-      return Response.json(
+      return NextResponse.json(
          {
             success: false,
             message: "Internal Server Error",
