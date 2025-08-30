@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import UserModel from "@/model/user.model";
 import dbConnect from "@/app/lib/databaseConnect";
-import { createPortal } from "react-dom";
 
 export const authOptions: NextAuthOptions = {
    providers: [
@@ -48,7 +47,7 @@ export const authOptions: NextAuthOptions = {
 
    callbacks: {
       async session({ session, token }) {
-         if (token && session.user) {
+         if (token) {
             session.user._id = token._id?.toString();
             session.user.userName = token.userName as string;
             session.user.email = token.email as string;
