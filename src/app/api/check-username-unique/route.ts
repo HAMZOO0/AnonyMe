@@ -11,7 +11,6 @@ const usernameQuerySchema = z.object({
 });
 
 await dbConnect();
-
 export async function GET(request: Request) {
    try {
       // get the username from the url
