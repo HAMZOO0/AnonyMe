@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
 
    // 4 : if user is not authenticated and trying to access protected path then redirect to login page
    if (!token && !isPublicPath) {
-      return NextResponse.redirect(new URL("/log-in", request.url));
+      return NextResponse.redirect(new URL("/sign-up", request.url));
    }
 }
 

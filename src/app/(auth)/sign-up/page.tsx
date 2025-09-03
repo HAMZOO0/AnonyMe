@@ -66,7 +66,7 @@ export default function Login() {
          const res = await axios.post<ApiResponse>("/api/sign-up", data);
          toast.success(res.data.message);
          // Use form data instead of local state
-         router.push(`/verify/${data.userName}`);
+         router.replace(`/verify/${data.userName}`);
       } catch (error) {
          const axiosError = error as AxiosError<ApiResponse>;
          toast.error(axiosError.response?.data.message || "Something went wrong. Please try again.");

@@ -9,6 +9,7 @@ export async function POST(requst: Request) {
       await dbConnect();
 
       const { userName, otp } = await requst.json();
+      console.log(userName);
 
       const decodedUsername = decodeURIComponent(userName);
 

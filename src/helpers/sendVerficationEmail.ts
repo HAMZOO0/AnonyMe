@@ -10,6 +10,7 @@ export async function sendVerificationEmail(email: string, username: string, ver
          subject: "Feeback Project Verification Code",
          react: VerificationEmailTemplete({ username, otp: verifyCode }), // otp is verification code
       });
+      console.log("Data", data);
 
       return {
          status: true,
