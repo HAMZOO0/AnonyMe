@@ -12,55 +12,67 @@ import {
    NavigationMenuList,
    navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ModeToggle } from "@/components/ModeToggle"; // <-- import here
 
 export function NavigationMenuDemoComponent() {
    const { data: session } = useSession();
    const user: User = session?.user as User;
 
    return (
-      <NavigationMenu viewport={false}>
-         <NavigationMenuList className="flex items-center gap-4">
-            {/* Home */}
-            <NavigationMenuItem>
-               <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                  <Link href="/">Home</Link>
-               </NavigationMenuLink>
-            </NavigationMenuItem>
+      <NavigationMenu className="w-full max-w-none border-b shadow-sm py-2 px-4 bg-background">
+         <NavigationMenuList className="flex w-full items-center justify-between">
+            {/* Left side: Logo + Links */}
+            <div className="flex items-center space-x-4">
+               <NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                     <Link href="/" className="font-semibold text-lg">
+                        MyApp
+                     </Link>
+                  </NavigationMenuLink>
+               </NavigationMenuItem>
 
-            {/* About Us */}
-            <NavigationMenuItem>
-               <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                  <Link href="/about">About Us</Link>
-               </NavigationMenuLink>
-            </NavigationMenuItem>
+               <NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                     <Link href="/">Home</Link>
+                  </NavigationMenuLink>
+               </NavigationMenuItem>
 
-            {/* Right side: user info */}
-            <div className="ml-auto flex items-center gap-3">
+               <NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                     <Link href="/about">About Us</Link>
+                  </NavigationMenuLink>
+               </NavigationMenuItem>
+            </div>
+
+            {/* Right side: Theme Toggle + User / Auth */}
+            <div className="flex items-center gap-3">
+               {/* <ModeToggle /> 👈 theme toggle button added here */}
                {user ? (
                   <>
-                     {/* Circular avatar with first letter */}
-                     <div className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">
-                        {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
-                     </div>
-                     <span className="font-medium">Welcome, {user?.name || user?.email}</span>
-                     <button
-                        onClick={() => signOut()}
-                        className="px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 transition"
-                     >
+                     <Avatar className="h-9 w-9">
+                        <AvatarFallback>
+                           {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
+                     </Avatar>
+                     <span className="font-medium text-sm text-foreground">Welcome, {user?.name || user?.email}</span>
+                     <Button onClick={() => signOut()} variant="destructive" size="sm">
                         Sign out
-                     </button>
+                     </Button>
                   </>
                ) : (
                   <>
-                     <span className="font-medium">Welcome, Guest</span>
-                     <Link
-                        className="px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 transition"
-                        href={"sign-in"}
-                     >
-                        Signin
-                     </Link>
+                     <span className="font-medium text-sm text-muted-foreground">Welcome, Guest</span>
+                     <Button asChild variant="ghost" size="sm">
+                        <Link href="/sign-in">Sign In</Link>
+                     </Button>
+                     <Button asChild size="sm">
+                        <Link href="/register">Sign Up</Link>
+                     </Button>
                   </>
                )}
+               <ModeToggle /> {/* 👈 theme toggle button added here */}
             </div>
          </NavigationMenuList>
       </NavigationMenu>
