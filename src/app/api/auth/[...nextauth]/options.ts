@@ -7,7 +7,7 @@ import dbConnect from "@/app/lib/databaseConnect";
 export const authOptions: NextAuthOptions = {
    providers: [
       CredentialsProvider({
-         id: "Credentials",
+         id: "credentials",
          name: "Credentials",
          // behind the seens login function
          credentials: {
@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
             try {
                // find user by username and email
                const user = await UserModel.findOne({
-                  $or: [{ email: credentials.userName }, { userName: credentials.userName }],
+                  $or: [{ email: credentials.identifier }, { userName: credentials.userName }],
                });
 
                // if user not found or not verified
@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
    },
    // the routes will handle by next auth , i dont need to create my own route :) hehe
    pages: {
-      signIn: "/log-in",
+      signIn: "/sign-in",
    },
    session: {
       strategy: "jwt",

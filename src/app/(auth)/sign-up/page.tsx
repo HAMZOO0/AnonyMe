@@ -17,7 +17,7 @@ import { AxiosError } from "axios";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export default function Login() {
+export default function Sigup() {
    const [usernameMessage, setUsernameMessage] = useState("");
    const [isCheckingUsername, setIsCheckingUsername] = useState(false);
    const [isSubmitting, setIsSubmitting] = useState(false);
@@ -164,7 +164,7 @@ export default function Login() {
          <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
                Already have an account?{" "}
-               <Link href="/login" className="text-blue-600 hover:underline font-medium">
+               <Link href="/sign-in" className="text-blue-600 hover:underline font-medium">
                   Sign in here
                </Link>
             </p>
