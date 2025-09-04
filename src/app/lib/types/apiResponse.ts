@@ -1,9 +1,9 @@
 import { Message } from "@/model/user.model";
-export interface ApiResponse {
+export interface ApiResponse<T = any> {
    status: boolean;
    message: string;
    isAcceptingMessages?: boolean;
    messages?: Array<Message>; // Optional, if the API returns a list of messages
-   data?: any; // Use a more specific type if you know the structure of the data
+   data?: T; // Use the generic type 'T' for data
    errorCode?: string; // Optional error code for more detailed error handling
 }

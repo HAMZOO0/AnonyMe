@@ -46,10 +46,10 @@ export default function Verfiy() {
             className="w-full max-w-md mx-auto mt-16 space-y-8 p-8 bg-white rounded-2xl shadow-lg"
          >
             {/* Heading */}
-            <div className="text-center">
-               <h2 className="text-2xl font-bold tracking-tight text-gray-900">Verify Your Account</h2>
-               <p className="mt-2 text-sm text-gray-500">Enter the 6-digit code sent to your email</p>
-            </div>
+            <div className="mb-6">
+            <h1 className="text-2xl font-bold text-center">Verify Your Account for AnonyMe</h1>
+            <p className="text-center text-gray-600">Enter the 6-digit code sent to your email</p>
+         </div>
             {/* OTP Input */}
             <FormField
                control={form.control}

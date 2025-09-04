@@ -65,8 +65,8 @@ export default function Signin() {
    return (
       <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg">
          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-center">Sign In</h1>
-            <p className="text-center text-gray-600">sign in to your account</p>
+            <h1 className="text-2xl font-bold text-center">Welcome to AnonyMe</h1>
+            <p className="text-center text-gray-600">Sign in to start your anonymous adventure</p>
          </div>
 
          <Form {...form}>
