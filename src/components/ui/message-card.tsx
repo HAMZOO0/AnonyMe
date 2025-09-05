@@ -18,12 +18,44 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-export default function MessageCard() {
+import { Button } from "./button";
+import { Message } from "react-hook-form";
+import { toast } from "sonner";
+import axios from "axios";
+
+type MessageCardProp = {
+   message: Message;
+   onMessageDelte: (messageId: string) => void;
+};
+export default function MessageCard({ message, onMessageDelte }: MessageCardProp) {
+   const handleDelte = async () => {
+      // ! ADD path here and complete it 
+      // const res = await axios.delete(`/api/delete-message${}`);
+   };
+
    return (
       <>
          <Card>
             <CardHeader>
                <CardTitle>Card Title</CardTitle>
+               <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                     <Button variant="outline">Show Dialog</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                     <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                           This action cannot be undone. This will permanently delete your account and remove your data
+                           from our servers.
+                        </AlertDialogDescription>
+                     </AlertDialogHeader>
+                     <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelte}>Continue</AlertDialogAction>
+                     </AlertDialogFooter>
+                  </AlertDialogContent>
+               </AlertDialog>
                <CardDescription>Card Description</CardDescription>
                <CardAction>Card Action</CardAction>
             </CardHeader>
