@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       }
 
       // Check if user is accepting messages
-      if (!user.isAcceptingMessage) {
+      if (!user.isAcceptingMessages) {
          return NextResponse.json(
             {
                success: false,

@@ -19,7 +19,7 @@ import {
    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./button";
-import { Message } from "react-hook-form";
+import { Message } from "@/model/user.model";
 import { toast } from "sonner";
 import axios from "axios";
 
@@ -29,7 +29,7 @@ type MessageCardProp = {
 };
 export default function MessageCard({ message, onMessageDelte }: MessageCardProp) {
    const handleDelte = async () => {
-      // ! ADD path here and complete it 
+      // ! ADD path here and complete it
       // const res = await axios.delete(`/api/delete-message${}`);
    };
 

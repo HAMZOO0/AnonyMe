@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import UserModel from "@/model/user.model";
 import dbConnect from "@/app/lib/databaseConnect";
+import { log } from "util";
 
 export const authOptions: NextAuthOptions = {
    providers: [
@@ -21,8 +22,9 @@ export const authOptions: NextAuthOptions = {
             try {
                // find user by username and email
                const user = await UserModel.findOne({
-                  $or: [{ email: credentials.identifier }, { userName: credentials.userName }],
+                  $or: [{ email: credentials.identifier }, { userName: credentials.identifier }],
                });
+               console.log("user ::", user);
 
                // if user not found or not verified
                if (!user) {

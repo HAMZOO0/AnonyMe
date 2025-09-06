@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { Content } from "next/font/google";
 
 export interface Message extends Document {
+   _id: string;
    content: string;
    createdAt: Date;
 }
@@ -27,7 +28,7 @@ export interface User extends Document {
    verifiedCode: string;
    verifiedCodeExpiry: Date;
    isVerified: boolean;
-   isAcceptingMessage: boolean;
+   isAcceptingMessages: boolean;
    messages: Message[]; // message is array of Message type
 }
 
@@ -64,7 +65,7 @@ const UserSchema: Schema<User> = new Schema({
       type: Boolean,
       default: false,
    },
-   isAcceptingMessage: {
+   isAcceptingMessages: {
       type: Boolean,
       default: true,
    },

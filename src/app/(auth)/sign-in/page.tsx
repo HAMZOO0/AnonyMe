@@ -21,7 +21,7 @@ export default function Signin() {
    const form = useForm<z.infer<typeof signInSchema>>({
       resolver: zodResolver(signInSchema),
       defaultValues: {
-         email: "",
+         identifier: "",
          password: "",
       },
    });
@@ -32,7 +32,7 @@ export default function Signin() {
       try {
          const result = await signIn("credentials", {
             redirect: false,
-            identifier: data.email,
+            identifier: data.identifier,
             password: data.password,
          });
 
@@ -74,12 +74,12 @@ export default function Signin() {
                {/* Email Field */}
                <FormField
                   control={form.control}
-                  name="email"
+                  name="identifier"
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Email OR Username </FormLabel>
                         <FormControl>
-                           <Input type="email" placeholder="Enter your email or username " {...field} />
+                           <Input type="text" placeholder="Enter your email or username " {...field} />
                         </FormControl>
                         <FormMessage />
                      </FormItem>
