@@ -25,9 +25,10 @@ import axios from "axios";
 
 type MessageCardProp = {
    message: Message;
-   onMessageDelte: (messageId: string) => void;
+
+   onMessageDelete: (messageId: string) => void;
 };
-export default function MessageCard({ message, onMessageDelte }: MessageCardProp) {
+export default function MessageCard({ message, onMessageDelete }: MessageCardProp) {
    const handleDelte = async () => {
       // ! ADD path here and complete it
       // const res = await axios.delete(`/api/delete-message${}`);

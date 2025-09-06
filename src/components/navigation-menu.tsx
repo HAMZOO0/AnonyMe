@@ -35,7 +35,7 @@ export function NavigationMenuDemoComponent() {
 
                <NavigationMenuItem>
                   <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                     <Link href="/">Home</Link>
+                     <Link href="/dashboard">Home</Link>
                   </NavigationMenuLink>
                </NavigationMenuItem>
 

@@ -69,7 +69,7 @@ export async function GET(request: Request) {
 
       //  here we can get the session
       const session = await getServerSession(authOptions);
-      console.log("session :: ", session);
+      // console.log("session :: ", session);
 
       const user = session?.user;
 
@@ -80,8 +80,8 @@ export async function GET(request: Request) {
 
       // get user id from session
       const userId = user?._id;
+      // console.log("userId", user?._id);
 
-      // fetch user
       const existingUser = await UserModel.findById(userId).select("-password -verifiedCode -verifiedCodeExpiry");
       if (!existingUser) {
          return Response.json(
@@ -97,7 +97,7 @@ export async function GET(request: Request) {
       return Response.json(
          {
             success: true,
-            isAcceptingMessages: existingUser?.isAcceptingMessages,
+            isAcceptingMessages: existingUser?.isAcceptingMessage,
          },
          { status: 200 }
       );

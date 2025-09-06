@@ -24,7 +24,6 @@ export const authOptions: NextAuthOptions = {
                const user = await UserModel.findOne({
                   $or: [{ email: credentials.identifier }, { userName: credentials.identifier }],
                });
-               console.log("user ::", user);
 
                // if user not found or not verified
                if (!user) {
@@ -50,7 +49,7 @@ export const authOptions: NextAuthOptions = {
    callbacks: {
       async session({ session, token }) {
          if (token) {
-            session.user._id = token._id?.toString();
+            session.user._id = token.id?.toString();
             session.user.userName = token.userName as string;
             session.user.email = token.email as string;
             session.user.isVerified = token.isVerified as boolean;
