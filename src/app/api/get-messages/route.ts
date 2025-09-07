@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
       //  here we can get the session
       const session = await getServerSession(authOptions);
-      console.log("session :: ", session);
+      // console.log("session :: ", session);
 
       const user = session?.user;
 
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
          },
       ]);
 
-      console.log("userid", user);
+      // console.log("userid", user);
       // console.log("userid", user?._id);
       console.log("existingUser", existingUser);
 

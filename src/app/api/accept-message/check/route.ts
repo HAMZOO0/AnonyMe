@@ -9,7 +9,7 @@ export async function POST(request: Request) {
       dbConnect();
 
       const { username } = await request.json();
-      console.log("usernmae  in accept mesge route:: ", username);
+      // console.log("usernmae  in accept mesge route:: ", username);
 
       // if no session then nested we check username in db
       if (!username) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       return Response.json(
          {
             success: true,
-            isAcceptingMessages: user?.isAcceptingMessage,
+            isAcceptingMessage: user?.isAcceptingMessage,
          },
          { status: 200 }
       );

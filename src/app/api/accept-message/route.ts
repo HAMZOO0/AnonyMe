@@ -10,7 +10,7 @@ export async function POST(request: Request) {
    try {
       //  here we can get the session
       const session = await getServerSession(authOptions);
-      console.log("session :: ", session);
+      // console.log("session :: ", session);
 
       const user = session?.user;
 
@@ -102,7 +102,7 @@ export async function GET(request: Request) {
          { status: 200 }
       );
    } catch (error) {
-      console.log("error :: ", error);
+      console.error("error :: ", error);
       return Response.json(
          {
             success: false,
