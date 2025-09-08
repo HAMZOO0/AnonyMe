@@ -5,13 +5,7 @@ import User from "next-auth";
 import UserModel from "@/model/user.model";
 import { Types } from "mongoose";
 
-type Params = {
-   params: {
-      id: string; // this will be the message ID from the URL
-   };
-};
-
-export async function DELETE(request: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
    try {
       dbConnect();
       const session = await getServerSession(authOptions);
