@@ -109,7 +109,7 @@ export default function UserProfilePage() {
       <div className="min-h-screen bg-background font-sans antialiased">
          <div className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
             <Card className="w-full max-w-2xl shadow-lg border-border/40">
-               <CardHeader className="text-center p-8">
+               <CardHeader className="text-center p-6 sm:p-8">
                   <Avatar className="w-24 h-24 mx-auto mb-4 border-4 border-primary/10">
                      <AvatarFallback className="bg-primary/20 text-primary">
                         <User className="w-12 h-12" />
@@ -120,7 +120,7 @@ export default function UserProfilePage() {
                      Send a secret message. It's completely anonymous.
                   </CardDescription>
                </CardHeader>
-               <CardContent className="p-8 pt-0">
+               <CardContent className="p-6 sm:p-8 pt-0">
                   {isAccepting ? (
                      <div className="space-y-8">
                         <div className="space-y-4">

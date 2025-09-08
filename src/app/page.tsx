@@ -91,7 +91,7 @@ export default function Home() {
          </header>
 
          {/* Main content */}
-         <main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12 text-white">
+         <main className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-12 text-white">
             {/* Hero Section */}
             <section className="text-center mb-16 md:mb-20 max-w-4xl mx-auto">
                <div className="inline-flex items-center rounded-full bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-300 mb-6 border border-purple-500/30">

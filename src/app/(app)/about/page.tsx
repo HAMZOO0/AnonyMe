@@ -104,7 +104,7 @@ export default function HowItWorks() {
          </header>
 
          {/* Main content */}
-         <main className="flex-grow container mx-auto px-4 md:px-24 py-12">
+         <main className="flex-grow container mx-auto px-4 sm:px-6 md:px-8 py-12">
             {/* Hero Section */}
             <section className="text-center mb-16 md:mb-20 max-w-3xl mx-auto">
                <h1 className="text-4xl md:text-5xl font-bold mb-6">

@@ -43,7 +43,7 @@ export default function Verfiy() {
       <Form {...form}>
          <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full max-w-md mx-auto mt-16 space-y-8 p-8 bg-white rounded-2xl shadow-lg"
+            className="w-full max-w-md mx-auto mt-16 space-y-8 p-6 sm:p-8 bg-white rounded-2xl shadow-lg"
          >
             {/* Heading */}
             <div className="mb-6">
