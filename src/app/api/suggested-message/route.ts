@@ -25,11 +25,13 @@ export async function POST(request: Request) {
       // Note: The 'gemini-2.5-flash' model name is hypothetical.
       // Please use a valid model name like 'gemini-1.5-flash'.
       const response = await ai.models.generateContent({
-         model: "gemini-2.5-flash",
+         model: "gemini-1.5-flash",
          contents: prompt,
       });
+      const text = response.candidates?.[0]?.content?.parts?.[0]?.text || "No text generated";
+      console.log(text);
 
-      return NextResponse.json({ text: response.text });
+      return NextResponse.json({ text });
    } catch (error) {
       console.error("Gemini API Error:", error);
       return NextResponse.json({ error: "Failed to get response from Gemini API" }, { status: 500 });

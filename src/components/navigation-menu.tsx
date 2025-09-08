@@ -68,7 +68,7 @@ export function NavigationMenuDemoComponent() {
                         <Link href="/sign-in">Sign In</Link>
                      </Button>
                      <Button asChild size="sm">
-                        <Link href="/register">Sign Up</Link>
+                        <Link href="/sign-up">Sign Up</Link>
                      </Button>
                   </>
                )}
