@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import path from "path";
 // import {default} from "next-auth/middleware";
 /**
  *
@@ -15,7 +16,10 @@ export async function middleware(request: NextRequest) {
    const pathname = request.nextUrl.pathname;
 
    const isPublicPath =
-      pathname.startsWith("/verify") || pathname.startsWith("/login-in") || pathname.startsWith("/sign-up");
+      pathname.startsWith("/verify") ||
+      pathname.startsWith("/login-in") ||
+      pathname.startsWith("/sign-up") ||
+      pathname == "/";
 
    // 2 : get token to make sure user is authenticated and it can access the protected routes but not public routes
    // here we get the token using next-auth method

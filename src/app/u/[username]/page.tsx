@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, User, Send, Shield, Mail, Sparkles, ChevronRight } from "lucide-react";
+import { Send, Shield, Sparkles, Loader2, User } from "lucide-react";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/app/lib/types/apiResponse";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function UserProfilePage() {
    const params = useParams();
@@ -16,31 +18,54 @@ export default function UserProfilePage() {
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [suggestedMessages, setSuggestedMessages] = useState<string[]>([]);
    const [isAccepting, setIsAccepting] = useState<boolean | null>(null);
+   const [isLoading, setIsLoading] = useState(true);
    const [isLoadingAcceptance, setIsLoadingAcceptance] = useState(false);
 
    const username = params.username as string;
 
-   // check if user accepts messages
-   const checkAcceptingMessages = async () => {
+   const getSuggestedMessages = async () => {
+      try {
+         const res = await axios.post<ApiResponse>("/api/suggested-message");
+         if (res.data.text && typeof res.data.text === "string") {
+            const messages = res.data.text
+               .split("||")
+               .map((msg) => msg.trim())
+               .filter((msg) => msg);
+            setSuggestedMessages(messages);
+         }
+      } catch (error) {
+         const axiosError = error as AxiosError<ApiResponse>;
+         console.error("AI text fetching error:", axiosError.response?.data.message);
+      }
+   };
+
+   const handleSuggestionClick = (suggestion: string) => {
+      setMessage(suggestion);
+   };
+
+   const checkAcceptingMessages = async (showToast = false) => {
       setIsLoadingAcceptance(true);
       try {
          const res = await axios.post<ApiResponse>("/api/accept-message/check", {
             username,
          });
          setIsAccepting(res?.data?.isAcceptingMessage!);
+         if (showToast) {
+            toast.success(`Message acceptance status: ${res.data.isAcceptingMessage ? 'On' : 'Off'}`)
+         }
 
-         if (!res?.data?.isAcceptingMessage) {
-            toast.warning("This user is not currently accepting messages");
+         if (res?.data?.isAcceptingMessage) {
+            getSuggestedMessages();
          }
       } catch (error) {
          const axiosError = error as AxiosError<ApiResponse>;
          toast.error(axiosError.response?.data.message || "Error checking settings");
+         setIsAccepting(false);
       } finally {
          setIsLoadingAcceptance(false);
       }
    };
 
-   // send message
    const sendMessage = async () => {
       if (!message.trim()) {
          toast.error("Please enter a message");
@@ -63,142 +88,104 @@ export default function UserProfilePage() {
       }
    };
 
-   const getSuggestedMessages = async () => {
-      try {
-         const res = await axios.post<ApiResponse>("/api/suggested-message");
-         if (res.data.text && typeof res.data.text === "string") {
-            // Split the text by "||" to get individual messages
-            const messages = res.data.text
-               .split("||")
-               .map((msg) => msg.trim())
-               .filter((msg) => msg);
-            setSuggestedMessages(messages);
-         }
-      } catch (error) {
-         const axiosError = error as AxiosError<ApiResponse>;
-         console.error("AI text fetching error:", axiosError.response?.data.message);
-      }
-   };
-
-   const handleSuggestionClick = (suggestion: string) => {
-      setMessage(suggestion);
-      // Optional: focus on the textarea after selecting a suggestion
-      const textarea = document.querySelector("textarea");
-      if (textarea) {
-         textarea.focus();
-      }
-   };
-
    useEffect(() => {
-      checkAcceptingMessages();
-      getSuggestedMessages();
+      async function initialCheck() {
+         setIsLoading(true);
+         await checkAcceptingMessages();
+         setIsLoading(false);
+      }
+      initialCheck();
    }, []);
 
-   if (isAccepting === false) {
+   if (isLoading) {
       return (
-         <div className="flex justify-center items-center min-h-screen bg-gray-50 p-6">
-            <Card className="w-full max-w-md shadow-xl rounded-2xl">
-               <CardHeader className="text-center">
-                  <div className="flex justify-center mb-3">
-                     <Shield className="w-14 h-14 text-amber-500" />
-                  </div>
-                  <CardTitle className="text-2xl font-semibold">@{username}</CardTitle>
-                  <CardDescription>This user is not currently accepting messages</CardDescription>
-               </CardHeader>
-               <CardContent className="text-center">
-                  <Button onClick={checkAcceptingMessages} disabled={isLoadingAcceptance}>
-                     {isLoadingAcceptance ? "Checking..." : "Check Again"}
-                  </Button>
-               </CardContent>
-            </Card>
+         <div className="flex justify-center items-center min-h-screen bg-background">
+            <Loader2 className="w-10 h-10 animate-spin text-primary" />
          </div>
       );
    }
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-6">
-         <div className="max-w-3xl mx-auto">
-            <Card className="w-full shadow-xl rounded-2xl overflow-hidden border-0">
-               {/* Profile Header */}
-               <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
-                  <div className="flex flex-col items-center text-center">
-                     <div className="bg-white/20 p-4 rounded-full mb-4">
+      <div className="min-h-screen bg-background font-sans antialiased">
+         <div className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
+            <Card className="w-full max-w-2xl shadow-lg border-border/40">
+               <CardHeader className="text-center p-8">
+                  <Avatar className="w-24 h-24 mx-auto mb-4 border-4 border-primary/10">
+                     <AvatarFallback className="bg-primary/20 text-primary">
                         <User className="w-12 h-12" />
-                     </div>
-                     <CardTitle className="text-2xl md:text-3xl font-bold mb-2">@{username}</CardTitle>
-                     <CardDescription className="text-blue-100">Send an anonymous message to this user</CardDescription>
-                  </div>
-               </div>
-
-               <CardContent className="p-6">
-                  <div className="flex flex-col gap-6">
-                     {/* Message Input */}
-                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">Your Message</label>
-                        <Textarea
-                           placeholder="Write your message here..."
-                           value={message}
-                           onChange={(e) => setMessage(e.target.value)}
-                           className="min-h-[120px] resize-none text-lg p-4"
-                        />
-                     </div>
-
-                     {/* Suggested Messages */}
-                     {suggestedMessages.length > 0 && (
-                        <div className="space-y-3">
-                           <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                              <Sparkles className="w-4 h-4 text-amber-500" />
-                              <span>Suggested Messages</span>
-                           </div>
-                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              {suggestedMessages.map((suggestion, index) => (
-                                 <button
-                                    key={index}
-                                    onClick={() => handleSuggestionClick(suggestion)}
-                                    className="text-left p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all duration-200 group"
-                                 >
-                                    <div className="flex items-start gap-2">
-                                       <ChevronRight className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0" />
-                                       <span className="text-sm text-gray-700 group-hover:text-blue-700">
-                                          {suggestion}
-                                       </span>
-                                    </div>
-                                 </button>
-                              ))}
-                           </div>
+                     </AvatarFallback>
+                  </Avatar>
+                  <CardTitle className="text-4xl font-bold tracking-tight">@{username}</CardTitle>
+                  <CardDescription className="text-lg text-muted-foreground mt-2">
+                     Send a secret message. It's completely anonymous.
+                  </CardDescription>
+               </CardHeader>
+               <CardContent className="p-8 pt-0">
+                  {isAccepting ? (
+                     <div className="space-y-8">
+                        <div className="space-y-4">
+                           <Textarea
+                              placeholder={`Whisper something to @${username}...`}
+                              value={message}
+                              onChange={(e) => setMessage(e.target.value)}
+                              className="min-h-[150px] text-base p-4 bg-background/50"
+                           />
                         </div>
-                     )}
+                        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                           <Button size="lg" onClick={sendMessage} disabled={!message.trim() || isSubmitting} className="w-full sm:w-auto">
+                              {isSubmitting ? (
+                                 <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...
+                                 </>
+                              ) : (
+                                 <>
+                                    <Send className="mr-2 h-4 w-4" /> Send Anonymously
+                                 </>
+                              )}
+                           </Button>
+                        </div>
 
-                     {/* Action Buttons */}
-                     <div className="flex flex-col gap-3">
-                        <Button
-                           onClick={sendMessage}
-                           disabled={!message || isSubmitting}
-                           className="w-full py-6 text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-                        >
-                           <Send className="w-5 h-5 mr-2" />
-                           {isSubmitting ? "Sending..." : "Send Message Anonymously"}
-                        </Button>
-
-                        <Button
-                           onClick={checkAcceptingMessages}
-                           variant="outline"
-                           disabled={isLoadingAcceptance}
-                           className="w-full"
-                        >
-                           <Shield className="w-4 h-4 mr-2" />
-                           {isLoadingAcceptance ? "Checking..." : "Verify Message Acceptance"}
+                        {suggestedMessages.length > 0 && (
+                           <div className="space-y-6 pt-6 border-t border-border/40">
+                              <div className="flex items-center justify-center gap-3 text-sm font-medium text-muted-foreground">
+                                 <Sparkles className="w-6 h-6 text-yellow-500" />
+                                 <span className="text-base">Need inspiration? Try one of these.</span>
+                              </div>
+                              <div className="flex flex-wrap justify-center gap-3">
+                                 {suggestedMessages.map((suggestion, index) => (
+                                    <Button
+                                       key={index}
+                                       variant="outline"
+                                       size="sm"
+                                       onClick={() => handleSuggestionClick(suggestion)}
+                                       className="text-xs md:text-sm"
+                                    >
+                                       {suggestion}
+                                    </Button>
+                                 ))}
+                              </div>
+                           </div>
+                        )}
+                     </div>
+                  ) : (
+                     <div className="text-center space-y-6">
+                        <p className="text-muted-foreground text-lg">This user is not currently accepting messages.</p>
+                        <Button onClick={() => checkAcceptingMessages(true)} disabled={isLoadingAcceptance}>
+                           {isLoadingAcceptance ? (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                           ) : null}
+                           Check Again
                         </Button>
                      </div>
-
-                     {/* Privacy Note */}
-                     <div className="flex items-center gap-2 text-sm text-gray-500 bg-blue-50 p-3 rounded-lg">
-                        <Shield className="w-4 h-4 text-blue-500" />
-                        <span>Your message will be completely anonymous</span>
-                     </div>
-                  </div>
+                  )}
                </CardContent>
             </Card>
+            <div className="text-center p-4 text-sm text-muted-foreground border-t border-border/40">
+               Curious about who sent you a message? Create an account to find out.
+               <Link href="/sign-up" className="text-primary font-semibold hover:underline ml-1">
+                  Get Started
+               </Link>
+            </div>
          </div>
       </div>
    );
