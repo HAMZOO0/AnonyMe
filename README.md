@@ -2,6 +2,10 @@
 
 Annoneme is a full-stack anonymous messaging platform built with the Next.js, offering a secure and engaging space for users to share and receive feedback without revealing their identity. It leverages AI to enhance user interaction and provides a seamless, modern user experience.
 
+## Live Demo
+
+You can check out the live demo here: [https://anony-me-amber.vercel.app/](https://anony-me-amber.vercel.app/)
+
 ## Key Features
 
 - **Secure User Authentication**: Safe and secure sign-up and sign-in with email verification.
